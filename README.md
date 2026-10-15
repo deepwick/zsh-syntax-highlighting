@@ -27,7 +27,7 @@ need a true-color terminal (`COLORTERM=truecolor`).
 - Commands, functions, and aliases are Yellow; builtins and reserved words
   (`if`, `for`) are Blue; unknown commands are Red; paths are underlined.
 
-Tested with zsh 5.9 and zsh-syntax-highlighting master.
+Tested with zsh 5.9 and zsh-syntax-highlighting 0.8.0.
 
 ## License
 

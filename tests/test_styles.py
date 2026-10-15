@@ -13,6 +13,8 @@ REPO = Path(__file__).resolve().parents[1]
 PALETTE = load_palette()
 C = PALETTE.colors
 UPSTREAM = "https://github.com/zsh-users/zsh-syntax-highlighting"
+REF = "0.8.0"
+COMMIT = "db085e4661f6aafd24e5acb5b2e17e4dd5dddf3e"
 
 EXPECTED = {
     "default": f"fg={C['foreground']}",
@@ -42,9 +44,12 @@ def upstream(tmp_path_factory):
     if shutil.which("zsh") is None or shutil.which("git") is None:
         pytest.skip("requires zsh and git")
     dest = tmp_path_factory.mktemp("zsh") / "zsh-syntax-highlighting"
-    result = subprocess.run(["git", "clone", "--quiet", "--depth", "1", UPSTREAM, str(dest)], capture_output=True, text=True)
+    result = subprocess.run(["git", "clone", "--quiet", "--depth", "1", "--branch", REF, UPSTREAM, str(dest)],
+                            capture_output=True, text=True)
     if result.returncode != 0:
         pytest.skip(f"cannot clone zsh-syntax-highlighting: {result.stderr}")
+    head = subprocess.run(["git", "-C", str(dest), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+    assert head == COMMIT, f"zsh-syntax-highlighting {REF} moved: {head}"
     return dest
 
 
